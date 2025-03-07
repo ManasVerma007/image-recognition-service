@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const githubLink = document.querySelector('a[href*="github.com"]');
         if (githubLink && !githubLink.getAttribute('href').includes('yourusername')) {
             // If the placeholder is still there, update with a real repo link
-            githubLink.setAttribute('href', 'https://github.com/yourusername/image-recognition-service');
+            githubLink.setAttribute('href', 'https://github.com/ManasVerma007/image-recognition-service');
         }
         
         // Add fade-in animation for cards when scrolling
