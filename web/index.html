@@ -3,77 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Recognition Service</title>
+    <title>Image Recognition Service - About</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .upload-area {
-            border: 2px dashed #ccc;
-            padding: 2rem;
-            text-align: center;
-            margin: 2rem 0;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .upload-area:hover {
-            border-color: #0d6efd;
-        }
-        #preview {
-            max-height: 300px;
-            margin-top: 1rem;
-        }
-        .loading {
-            display: none;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-4">Image Recognition Service</h1>
-        
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Upload an Image for Analysis</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="upload-area" id="dropArea">
-                            <p>Drop an image here or click to select</p>
-                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                            <div id="previewContainer" style="display: none;">
-                                <img id="preview" class="img-fluid">
-                            </div>
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            <button id="uploadButton" class="btn btn-primary">
-                                Upload and Analyze Image
-                            </button>
-                        </div>
+<body class="about-page">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-camera"></i> Image Recognition Service
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="prediction.html">Try It</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/yourusername/image-recognition-service" target="_blank">
+                            <i class="bi bi-github"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-                        <div class="text-center loading mt-3" id="loadingIndicator">
-                            <div class="spinner-border text-primary" role="status">
-                                <span class="visually-hidden">Loading...</span>
+    <header class="bg-dark text-white text-center py-5">
+        <div class="container">
+            <h1 class="display-4">AI-Powered Image Recognition</h1>
+            <p class="lead">Automatically identify objects, people, scenes, and activities in your images</p>
+            <a href="prediction.html" class="btn btn-primary btn-lg mt-3">Try It Now</a>
+        </div>
+    </header>
+
+    <main class="container my-5">
+        <section class="row">
+            <div class="col-md-8 mx-auto">
+                <h2 class="text-center mb-4">How It Works</h2>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center text-primary">
+                                <i class="bi bi-upload fs-1"></i>
                             </div>
-                            <p>Processing image...</p>
+                            <div class="col-md-10">
+                                <h3>1. Upload Your Image</h3>
+                                <p>Select or drag-and-drop any image file you want to analyze. Our system securely transfers your image to AWS S3.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="card mt-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Recognition Results</h5>
-                    </div>
+                
+                <div class="card mb-4">
                     <div class="card-body">
-                        <pre id="results" class="p-3 bg-light rounded">No results yet. Upload an image to see analysis.</pre>
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center text-primary">
+                                <i class="bi bi-cpu fs-1"></i>
+                            </div>
+                            <div class="col-md-10">
+                                <h3>2. AI Processing</h3>
+                                <p>AWS Lambda automatically triggers AWS Rekognition to analyze your image using deep learning models trained on millions of images.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 text-center text-primary">
+                                <i class="bi bi-list-check fs-1"></i>
+                            </div>
+                            <div class="col-md-10">
+                                <h3>3. View Results</h3>
+                                <p>Within seconds, you'll see the objects, scenes, and concepts detected in your image along with confidence scores.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </section>
+        
+        <section class="row mt-5">
+            <div class="col-md-8 mx-auto">
+                <h2 class="text-center mb-4">Technical Details</h2>
+                <div class="card">
+                    <div class="card-body">
+                        <p>This service is built using a serverless architecture on AWS, featuring:</p>
+                        <ul>
+                            <li><strong>Frontend:</strong> HTML, CSS, JavaScript</li>
+                            <li><strong>Storage:</strong> Amazon S3 for image storage</li>
+                            <li><strong>Processing:</strong> AWS Lambda for event-driven image processing</li>
+                            <li><strong>AI Services:</strong> Amazon Rekognition for deep-learning based image analysis</li>
+                            <li><strong>Database:</strong> Amazon DynamoDB for storing and retrieving results</li>
+                            <li><strong>API:</strong> Amazon API Gateway for RESTful endpoints</li>
+                        </ul>
+                        <p>The service can detect thousands of objects, scenes, and concepts with high accuracy.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p>Image Recognition Service - Powered by AWS Rekognition</p>
+            <a href="https://github.com/ManasVerma007/image-recognition-service" class="text-white me-3" target="_blank">
+                <i class="bi bi-github"></i> GitHub
+            </a>
+            <a href="prediction.html" class="text-white">
+                <i class="bi bi-image"></i> Try It
+            </a>
         </div>
-    </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1095.0/dist/aws-sdk.min.js"></script>
-    <script src="app.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>

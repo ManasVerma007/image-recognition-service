@@ -1,0 +1,199 @@
+/* General styles */
+body {
+    background-color: #f8f9fa;
+    color: #343a40;
+}
+
+/* New color theme variables */
+:root {
+    --primary-color: #5D87A1;        /* Subtle blue-gray */
+    --primary-dark: #41627A;         /* Darker blue-gray for hover states */
+    --accent-color: #76A19A;         /* Subtle teal accent color */
+    --light-bg: #F0F3F5;             /* Light background */
+    --dark-bg: #2A3B47;              /* Dark background for footer/header */
+    --success-color: #76A19A;        /* Muted green for success */
+    --warning-color: #D9B779;        /* Muted amber for warning */
+    --danger-color: #C26D6D;         /* Muted red for error */
+    --text-dark: #2A3B47;            /* Main text color */
+    --text-light: #F0F3F5;           /* Light text color */
+    --border-color: #DCE2E6;         /* Light border color */
+}
+
+/* Override Bootstrap primary color */
+.bg-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-primary:hover, 
+.btn-primary:focus, 
+.btn-primary:active {
+    background-color: var(--primary-dark) !important;
+    border-color: var(--primary-dark) !important;
+}
+
+.btn-outline-primary {
+    color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+/* Header and footer */
+.navbar-dark, footer.bg-dark {
+    background-color: var(--dark-bg) !important;
+}
+
+header.bg-dark {
+    background-color: var(--dark-bg) !important;
+    background-image: linear-gradient(135deg, var(--dark-bg) 0%, var(--primary-dark) 100%);
+}
+
+/* Card styling */
+.card {
+    border-color: var(--border-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.card-header {
+    background-color: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Upload area styles */
+.upload-area {
+    border: 2px dashed var(--border-color);
+    padding: 3rem 1rem;
+    text-align: center;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: var(--light-bg);
+}
+
+.upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(93, 135, 161, 0.05);
+}
+
+/* Image preview */
+#preview {
+    max-height: 300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Loading indicator - FIX: hide by default */
+.loading-overlay {
+    display: none; /* Hide by default */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.8);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+/* Label results styling */
+.label-results {
+    margin-top: 1rem;
+}
+
+.label-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.label-item:last-child {
+    border-bottom: none;
+}
+
+.confidence-bar {
+    height: 8px;
+    background-color: var(--light-bg);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 4px;
+}
+
+.confidence-level {
+    height: 100%;
+    background-color: var(--primary-color);
+}
+
+/* Headers */
+.section-header {
+    position: relative;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.section-header:after {
+    content: "";
+    position: absolute;
+    width: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    bottom: 0;
+    left: 0;
+}
+
+/* High confidence labels */
+.high-confidence {
+    color: var(--success-color);
+}
+
+/* Medium confidence labels */
+.medium-confidence {
+    color: var(--warning-color);
+}
+
+/* Low confidence labels */
+.low-confidence {
+    color: var(--danger-color);
+}
+
+/* Animations */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* About page specific */
+.feature-icon {
+    background-color: var(--light-bg);
+    padding: 1.5rem;
+    border-radius: 50%;
+    display: inline-flex;
+    margin-bottom: 1rem;
+}

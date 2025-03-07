@@ -1,15 +1,22 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
     const dropArea = document.getElementById('dropArea');
     const fileInput = document.getElementById('fileInput');
     const preview = document.getElementById('preview');
     const previewContainer = document.getElementById('previewContainer');
     const uploadButton = document.getElementById('uploadButton');
-    const resultsArea = document.getElementById('results');
     const loadingIndicator = document.getElementById('loadingIndicator');
+    const statusText = document.getElementById('statusText');
+    const resultsContainer = document.getElementById('resultsContainer');
+    const noResults = document.getElementById('noResults');
+    const labelResults = document.getElementById('labelResults');
+    const imageDetails = document.getElementById('imageDetails');
 
     // Replace with your actual API endpoint after deployment
-    // You will get this URL from the SAM deployment output
     const apiEndpoint = 'https://51snhuxc4c.execute-api.us-east-1.amazonaws.com/Prod';
+    
+    // Ensure loading indicator is hidden on page load
+    loadingIndicator.style.display = 'none';
     
     // Drop area event listeners
     dropArea.addEventListener('click', () => fileInput.click());
@@ -51,6 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
         reader.onload = function(e) {
             preview.src = e.target.result;
             previewContainer.style.display = 'block';
+            
+            // Reset results area
+            resultsContainer.classList.add('d-none');
+            noResults.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
@@ -67,8 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Upload image to S3
     async function uploadImage(file) {
-        loadingIndicator.style.display = 'block';
-        resultsArea.textContent = 'Getting upload URL...';
+        // Show loading and hide results
+        loadingIndicator.style.display = 'flex'; // Show now
+        noResults.style.display = 'none';
+        resultsContainer.classList.add('d-none');
+        statusText.textContent = 'Getting upload URL...';
         
         try {
             // 1. Get a pre-signed URL from our API Gateway
@@ -83,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const fileName = urlData.fileName;
             
             // 2. Upload to S3 using the pre-signed URL
-            resultsArea.textContent = 'Uploading image...';
+            statusText.textContent = 'Uploading image...';
             const uploadResponse = await fetch(uploadUrl, {
                 method: 'PUT',
                 body: file,
@@ -96,22 +110,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 throw new Error(`Failed to upload to S3: ${uploadResponse.statusText}`);
             }
             
-            resultsArea.textContent = 'Image uploaded! Processing (this may take a few moments)...';
+            statusText.textContent = 'Processing image (this may take a few moments)...';
             
             // 3. Poll for results
             await pollForResults(fileName);
             
         } catch (error) {
             console.error('Error:', error);
-            loadingIndicator.style.display = 'none';
-            resultsArea.textContent = `Error: ${error.message}`;
+            loadingIndicator.style.display = 'none'; // Hide on error
+            showError(error.message);
         }
     }
     
     // Poll for processing results
     async function pollForResults(fileName) {
         // We'll simulate polling by fetching the list of images periodically
-        // and looking for our image name
         let attempts = 0;
         const maxAttempts = 20; // 20 * 1.5s = 30s maximum wait time
         
@@ -128,8 +141,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     if (foundImage) {
                         // We found our image with results!
-                        loadingIndicator.style.display = 'none';
-                        displayResults(foundImage);
+                        loadingIndicator.style.display = 'none'; // Hide when done
+                        
+                        // Format the results as per the required structure
+                        const formattedResults = {
+                            imageId: foundImage.id,
+                            imageName: foundImage.image_name,
+                            detectedLabels: foundImage.labels.map(label => ({
+                                name: label.name,
+                                confidence: label.confidence
+                            })),
+                            processedAt: foundImage.created_at
+                        };
+                        
+                        displayResults(formattedResults);
                         return;
                     }
                 }
@@ -141,13 +166,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     setTimeout(checkResults, 1500);
                 } else {
                     // Give up after max attempts
-                    loadingIndicator.style.display = 'none';
-                    resultsArea.textContent = 'The image is taking longer than expected to process. Please check back later.';
+                    loadingIndicator.style.display = 'none'; // Always hide when done
+                    showError('The image is taking longer than expected to process. Please check back later.');
                 }
             } catch (error) {
                 console.error('Error polling for results:', error);
-                loadingIndicator.style.display = 'none';
-                resultsArea.textContent = `Error checking results: ${error.message}`;
+                loadingIndicator.style.display = 'none'; // Always hide when done
+                showError(`Error checking results: ${error.message}`);
             }
         };
         
@@ -155,16 +180,66 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(checkResults, 3000); // Give Lambda some time to start processing
     }
     
+    // Display error message
+    function showError(message) {
+        resultsContainer.classList.add('d-none');
+        noResults.style.display = 'block';
+        noResults.innerHTML = `
+            <i class="bi bi-exclamation-triangle text-danger display-1"></i>
+            <p class="mt-2 text-danger">Error: ${message}</p>
+        `;
+    }
+    
     // Display results
     function displayResults(results) {
-        // Format the results nicely
-        const formattedOutput = {
-            imageId: results.id,
-            imageName: results.image_name,
-            detectedLabels: results.labels,
-            processedAt: results.created_at
-        };
+        // Show results container and hide no results message
+        resultsContainer.classList.remove('d-none');
+        noResults.style.display = 'none';
         
-        resultsArea.textContent = JSON.stringify(formattedOutput, null, 2);
+        // Display image details
+        const imageName = results.imageName.split('-').slice(1).join('-'); // Remove UUID prefix
+        const processedDate = new Date(results.processedAt).toLocaleString();
+        imageDetails.textContent = `ID: ${results.imageId.substring(0, 8)}... | File: ${imageName} | Processed: ${processedDate}`;
+        
+        // Clear previous results
+        labelResults.innerHTML = '';
+        
+        // Sort labels by confidence - highest first
+        const sortedLabels = [...results.detectedLabels].sort((a, b) => b.confidence - a.confidence);
+        
+        // Add each label with a confidence bar
+        sortedLabels.forEach(label => {
+            const confidenceValue = parseFloat(label.confidence);
+            let confidenceClass = 'high-confidence';
+            
+            if (confidenceValue < 80) {
+                confidenceClass = 'low-confidence';
+            } else if (confidenceValue < 90) {
+                confidenceClass = 'medium-confidence';
+            }
+            
+            const labelElement = document.createElement('div');
+            labelElement.className = 'label-item';
+            labelElement.innerHTML = `
+                <div class="w-100">
+                    <div class="d-flex justify-content-between">
+                        <span>${label.name}</span>
+                        <span class="${confidenceClass}">${confidenceValue.toFixed(1)}%</span>
+                    </div>
+                    <div class="confidence-bar">
+                        <div class="confidence-level" style="width: ${confidenceValue}%"></div>
+                    </div>
+                </div>
+            `;
+            labelResults.appendChild(labelElement);
+        });
     }
+    
+    // Fix CSS filename issue if needed
+    const cssLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    cssLinks.forEach(link => {
+        if (link.getAttribute('href') === 'css/styles.css') {
+            link.setAttribute('href', 'css/style.css');
+        }
+    });
 });
