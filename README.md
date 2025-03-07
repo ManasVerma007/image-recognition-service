@@ -2,66 +2,30 @@
 
 This project is an AI-powered image classifier that utilizes AWS services such as S3, Lambda, and Rekognition to detect objects in images uploaded by users.
 
-## Project Structure
+## Live Demo
 
-```
-image-recognition-service
-├── src
-│   ├── lambda_function.py          # Main AWS Lambda function
-│   ├── utils
-│   │   ├── __init__.py             # Initializes the utils package
-│   │   ├── rekognition_helper.py    # Functions for AWS Rekognition
-│   │   └── s3_helper.py             # Functions for AWS S3
-│   └── tests
-│       ├── __init__.py             # Initializes the tests package
-│       ├── test_lambda_function.py  # Unit tests for the Lambda function
-│       └── test_utils.py            # Unit tests for utility functions
-├── template.yaml                    # AWS SAM template
-├── requirements.txt                 # Project dependencies
-├── .gitignore                       # Git ignore file
-└── README.md                        # Project documentation
-```
+You can try the application live at:
+[https://image-recognition-service.vercel.app/](https://image-recognition-service.vercel.app/)
 
-## Setup Instructions
+## Features
 
-1. **Clone the repository:**
-   ```
-   git clone <repository-url>
-   cd image-recognition-service
-   ```
-
-2. **Install dependencies:**
-   Ensure you have Python and pip installed, then run:
-   ```
-   pip install -r requirements.txt
-   ```
-
-3. **Configure AWS Credentials:**
-   Make sure your AWS credentials are configured. You can do this by running:
-   ```
-   aws configure
-   ```
-
-4. **Deploy the application:**
-   Use the AWS SAM CLI to build and deploy the application:
-   ```
-   sam build
-   sam deploy --guided
-   ```
+- **Object Detection**: Identify objects, scenes, concepts, and activities in your images
+- **Confidence Scoring**: See how confident the AI is about each detection
+- **Real-Time Processing**: Upload and get results within seconds
+- **Serverless Architecture**: Built on AWS Lambda for scalability
 
 ## Usage
 
-- Upload an image to the specified S3 bucket.
-- The upload will trigger the Lambda function, which processes the image and calls AWS Rekognition to detect labels.
-- Detected labels will be stored in DynamoDB or returned via an API.
+1. Navigate to the [application](https://image-recognition-service.vercel.app/)
+2. Click "Try It" or go to the [prediction page](https://image-recognition-service.vercel.app/prediction.html)
+3. Upload an image by clicking or dropping a file
+4. View the detected objects and their confidence scores
 
-## Testing
+## Technology Stack
 
-To run the unit tests, navigate to the `src/tests` directory and run:
-```
-pytest
-```
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+- **Frontend**: HTML, CSS, JavaScript
+- **Backend**: AWS Lambda (Python)
+- **Image Processing**: AWS Rekognition
+- **Storage**: Amazon S3, DynamoDB
+- **API**: Amazon API Gateway
+- **Hosting**: Vercel
