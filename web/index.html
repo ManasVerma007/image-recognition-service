@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Recognition Service</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .upload-area:hover {
+            border-color: #0d6efd;
+        }
+        #preview {
+            max-height: 300px;
+            margin-top: 1rem;
+        }
+        .loading {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Image Recognition Service</h1>
+        
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Upload an Image for Analysis</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="upload-area" id="dropArea">
+                            <p>Drop an image here or click to select</p>
+                            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                            <div id="previewContainer" style="display: none;">
+                                <img id="preview" class="img-fluid">
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button id="uploadButton" class="btn btn-primary">
+                                Upload and Analyze Image
+                            </button>
+                        </div>
+
+                        <div class="text-center loading mt-3" id="loadingIndicator">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            <p>Processing image...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="card-title mb-0">Recognition Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre id="results" class="p-3 bg-light rounded">No results yet. Upload an image to see analysis.</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aws-sdk@2.1095.0/dist/aws-sdk.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
